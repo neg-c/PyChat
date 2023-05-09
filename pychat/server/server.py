@@ -32,3 +32,8 @@ class ChatServer:
                 target=self.handle_client, args=(conn, addr)
             )
             clientThread.start()
+
+
+if __name__ == "__main__":
+    server = ChatServer("localhost", 8888)
+    server.listen_forever()
