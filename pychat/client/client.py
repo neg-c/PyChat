@@ -15,3 +15,12 @@ class ChatClient:
 
     def close(self):
         self.sock.close()
+
+if __name__ == "__main__":
+    client = ChatClient("localhost", 8888)
+    while True:
+        message = input("Enter message: ")
+        client.send_message(message)
+        if message == "exit":
+            break
+    client.close()
