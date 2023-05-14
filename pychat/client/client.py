@@ -1,5 +1,5 @@
 import socket
-
+from pychat.encryption.RSA import RSA
 
 class ChatClient:
     def __init__(self, host, port):
@@ -9,9 +9,12 @@ class ChatClient:
         self.sock.connect((self.host, self.port))
 
     def send_message(self, message):
-        self.sock.sendall(message.encode("utf-8"))
-        data = self.sock.recv(1024)
-        print(f"Received from server: {data.decode('utf-8').strip()}")
+        public_key, _ = RSA.generate_keypair()
+        encrypted_message = RSA.encrypt(public_key, message)
+
+        encrypted_message_hex = ' '.join(format(x, '02X').zfill(2) for x in encrypted_message)
+        encrypted_message_bytes = encrypted_message_hex.encode('utf-8')
+        self.sock.sendall(encrypted_message_bytes)
 
     def close(self):
         self.sock.close()
